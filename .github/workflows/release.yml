@@ -69,20 +69,31 @@ jobs:
             echo "proceed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # The action is the single source of truth for the version; the VERSION
-      # file mirrors it in the repository. The bump commit is pushed to main
-      # only AFTER the tests pass, so main is never left in a bumped-but-broken
-      # state. [skip ci] prevents this push from triggering another release run.
-      - name: Update VERSION file
+      # The action is the single source of truth for the version. All version
+      # references across the repo are updated atomically here. The bump commit
+      # is pushed to main only AFTER the tests pass, so main is never left in a
+      # bumped-but-broken state. [skip ci] prevents this push from triggering
+      # another release run.
+      - name: Update version in all files
         if: steps.guard.outputs.proceed == 'true'
-        run: echo "${{ steps.tag.outputs.new_version }}" > VERSION
+        run: |
+          VERSION="${{ steps.tag.outputs.new_version }}"
+          TAG="${{ steps.tag.outputs.new_tag }}"
+
+          # VERSION file — mirrors the released version in the repository
+          echo "${VERSION}" > VERSION
+
+          # Landing page (docs/index.html) — hero version badge
+          sed -i -E "s/v[0-9]+\.[0-9]+\.[0-9]+/${TAG}/g" docs/index.html
+
+          echo "All version references updated to ${TAG}"
 
       - name: Stage version bump commit (local only)
         if: steps.guard.outputs.proceed == 'true'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add VERSION
+          git add VERSION docs/index.html
           if git diff --cached --quiet; then
             echo "No file changes — nothing to commit."
           else
