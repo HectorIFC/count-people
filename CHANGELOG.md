@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   injection, history file created with mode `600`, token-free logs
 - Test suite: 101 unit tests at 100% coverage (80% gate in CI) plus opt-in
   real-model integration tests (`RUN_INTEGRATION=1`)
-- Google Colab notebook alternative (`count-peoples.ipynb`)
+- Google Colab notebook alternative (`count-people.ipynb`)
 - Bot logo (`assets/logo.png`) and its generator script (`assets/make_logo.py`)
 - CI workflow (tests + coverage gate + ruff), SemVer release automation from
   conventional commits, Dependabot and PR template
