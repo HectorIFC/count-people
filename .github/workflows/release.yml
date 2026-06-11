@@ -1,0 +1,135 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+# Only one release runs at a time. If a newer commit arrives while a release
+# is in progress, the current run finishes — not cancelled — so the tag and
+# release always complete cleanly. The next queued run will then compute the
+# version from the commits that arrived in the meantime.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Version, Tag & Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # full history required for conventional commits parsing
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      # Computes the next SemVer from conventional commits since the last tag.
+      #
+      # Bump rules (squash-merge PR title as conventional commit):
+      #   feat!: / BREAKING CHANGE: → major  (0.1.0 → 1.0.0)
+      #   feat:                     → minor  (0.0.1 → 0.1.0)
+      #   fix: / build: / chore:    → patch  (0.1.0 → 0.1.1)
+      - name: Compute next version
+        id: tag
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: true
+          default_bump: patch
+          tag_prefix: v
+
+      - name: Print version decision
+        run: |
+          echo "Previous tag : ${{ steps.tag.outputs.previous_tag }}"
+          echo "New version  : ${{ steps.tag.outputs.new_version }}"
+          echo "New tag      : ${{ steps.tag.outputs.new_tag }}"
+          echo "Bump type    : ${{ steps.tag.outputs.release_type }}"
+
+      # Single gate for the remaining steps: skip when there is nothing to
+      # release (no version change) or when the tag already exists (a previous
+      # interrupted run, or two runs computing the same version concurrently).
+      - name: Check if a release is needed
+        id: guard
+        run: |
+          TAG="${{ steps.tag.outputs.new_tag }}"
+          if [ "$TAG" = "${{ steps.tag.outputs.previous_tag }}" ]; then
+            echo "No releasable commits since last tag — skipping release."
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+          elif git tag --list | grep -qx "$TAG"; then
+            echo "Tag $TAG already exists — this version was already released. Skipping."
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Releasing $TAG."
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The action is the single source of truth for the version; the VERSION
+      # file mirrors it in the repository. The bump commit is pushed to main
+      # only AFTER the tests pass, so main is never left in a bumped-but-broken
+      # state. [skip ci] prevents this push from triggering another release run.
+      - name: Update VERSION file
+        if: steps.guard.outputs.proceed == 'true'
+        run: echo "${{ steps.tag.outputs.new_version }}" > VERSION
+
+      - name: Stage version bump commit (local only)
+        if: steps.guard.outputs.proceed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add VERSION
+          if git diff --cached --quiet; then
+            echo "No file changes — nothing to commit."
+          else
+            git commit -m "chore: release ${{ steps.tag.outputs.new_tag }} [skip ci]"
+            echo "Version bump committed locally."
+          fi
+
+      - name: Install system libraries (OpenCV runtime)
+        if: steps.guard.outputs.proceed == 'true'
+        run: sudo apt-get update && sudo apt-get install -y libgl1
+
+      - name: Install CPU-only torch
+        if: steps.guard.outputs.proceed == 'true'
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install dependencies
+        if: steps.guard.outputs.proceed == 'true'
+        run: PIP_CONSTRAINT=$PWD/constraints.txt pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Run tests
+        if: steps.guard.outputs.proceed == 'true'
+        run: pytest
+
+      - name: Push version bump to main
+        if: steps.guard.outputs.proceed == 'true'
+        run: |
+          if ! git diff --quiet HEAD origin/main; then
+            git push origin main
+            echo "Version bump pushed to main."
+          else
+            echo "Nothing to push."
+          fi
+
+      - name: Create git tag
+        if: steps.guard.outputs.proceed == 'true'
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.tag.outputs.new_version }}
+          tag_prefix: v
+
+      - name: Create GitHub Release
+        if: steps.guard.outputs.proceed == 'true'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag.outputs.new_tag }}
+          name: ${{ steps.tag.outputs.new_tag }}
+          body: ${{ steps.tag.outputs.changelog }}
+          generateReleaseNotes: false
+          makeLatest: true

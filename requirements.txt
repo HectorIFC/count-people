@@ -1,0 +1,10 @@
+# Install with: PIP_CONSTRAINT=$PWD/constraints.txt pip install -r requirements.txt
+# (the constraint works around the pkg_resources removal in setuptools >= 81)
+python-telegram-bot>=21.0
+torch>=2.1
+ultralytics==8.1.0  # version required by MiVOLO
+opencv-python>=4.8
+omegaconf>=2.3  # referenced while unpickling the detector checkpoint
+gdown>=5.0
+# Pinned commit: immutable git dependency (supply-chain protection)
+mivolo @ git+https://github.com/WildChlamydia/MiVOLO.git@37475e3f8818b5f22448003feec3e64b01bfb188
