@@ -1,4 +1,4 @@
-# count-peoples
+# count-people
 
 Telegram bot that counts people in photos and videos with MiVOLO (age group +
 gender demographics), replies localized in pt/en/es, and keeps a CSV history of
@@ -26,7 +26,7 @@ set -a && source .env && set +a && python3 bot.py   # run the bot locally
 - `history.py` — CSV persistence and label sanitization
 - `messages.py` — all user-facing texts in pt/en/es, resolved per sender's
   Telegram client language
-- `count-peoples.ipynb` — standalone Google Colab alternative (same logic,
+- `count-people.ipynb` — standalone Google Colab alternative (same logic,
   duplicated on purpose; keep the CSV schema in sync with `history.py`)
 
 ## Conventions

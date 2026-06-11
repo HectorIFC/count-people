@@ -2,7 +2,7 @@
 
 <img src="assets/logo.png" alt="Bot logo" width="160" align="right">
 
-**[Project site →](https://hectorifc.github.io/count-peoples/)**
+**[Project site →](https://hectorifc.github.io/count-people/)**
 
 
 Telegram bot that receives photos and videos, counts the people in the scene
@@ -32,7 +32,7 @@ the device automatically.
 ### Mac (Apple Silicon)
 
 ```bash
-git clone <your-repository> && cd count-peoples
+git clone <your-repository> && cd count-people
 python3.12 -m venv .venv && source .venv/bin/activate
 PIP_CONSTRAINT=$PWD/constraints.txt pip install -r requirements.txt
 ```
@@ -113,10 +113,10 @@ Wants=network-online.target
 [Service]
 User=peoplebot
 Group=peoplebot
-WorkingDirectory=/opt/count-peoples
+WorkingDirectory=/opt/count-people
 # Secrets via EnvironmentFile (inline Environment= would leak in `systemctl show`)
 EnvironmentFile=/etc/people-counter/env
-ExecStart=/opt/count-peoples/.venv/bin/python3 bot.py
+ExecStart=/opt/count-people/.venv/bin/python3 bot.py
 Restart=on-failure
 RestartSec=5
 
@@ -125,7 +125,7 @@ NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=true
 PrivateTmp=true
-ReadWritePaths=/opt/count-peoples
+ReadWritePaths=/opt/count-people
 
 [Install]
 WantedBy=multi-user.target
@@ -199,7 +199,7 @@ photo/video, which takes minutes — hence the opt-in flag.
 
 ## Alternative: Colab notebook
 
-`count-peoples.ipynb` runs the same flow on Google Colab (free T4 GPU), with
+`count-people.ipynb` runs the same flow on Google Colab (free T4 GPU), with
 manual photo/video upload and history saved to your Google Drive. Useful when
 you do not want to keep a bot running.
 
@@ -210,7 +210,7 @@ bot.py               # Telegram bot (long polling, allowlist, limits)
 messages.py          # localized replies (pt/en/es)
 analysis.py          # counting and demographics (MiVOLO), photo and video
 history.py           # CSV history persistence
-count-peoples.ipynb  # Google Colab alternative
+count-people.ipynb  # Google Colab alternative
 requirements.txt     # dependencies (MiVOLO pinned by commit)
 constraints.txt      # build constraint (setuptools < 81)
 .env.example         # configuration template

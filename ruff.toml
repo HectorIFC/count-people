@@ -2,7 +2,7 @@ target-version = "py312"
 line-length = 100
 
 # The Colab notebook is standalone by design (names span cells, ! magics)
-extend-exclude = ["count-peoples.ipynb"]
+extend-exclude = ["count-people.ipynb"]
 
 [lint]
 # pycodestyle, pyflakes, warnings, import sorting, bugbear, pyupgrade

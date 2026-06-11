@@ -28,7 +28,7 @@ def counter():
 @pytest.mark.integration
 @run_integration
 def test_real_photo_count(counter):
-    photo = ROOT / "peoples.jpg"
+    photo = ROOT / "people.jpg"
     if not photo.exists():
         pytest.skip("sample photo not available")
 
@@ -43,7 +43,7 @@ def test_real_photo_count(counter):
 @pytest.mark.integration
 @run_integration
 def test_real_video_count(counter):
-    video = ROOT / "peoples.mp4"
+    video = ROOT / "people.mp4"
     if not video.exists():
         pytest.skip("sample video not available")
 

@@ -29,8 +29,8 @@ models/
 
 # Exception: public demo media used by the GitHub Pages site (docs/)
 !docs/assets/logo.png
-!docs/assets/peoples.jpg
-!docs/assets/peoples.mp4
+!docs/assets/people.jpg
+!docs/assets/people.mp4
 
 # macOS
 .DS_Store

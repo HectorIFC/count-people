@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>count-peoples — people counting Telegram bot</title>
+<title>count-people — people counting Telegram bot</title>
 <meta name="description" content="Privacy-first Telegram bot that counts people in photos and videos with MiVOLO (YOLOv8) — age/gender demographics, replies in pt/en/es.">
 <link rel="icon" type="image/png" href="assets/logo.png">
-<meta property="og:title" content="count-peoples — people counting Telegram bot">
+<meta property="og:title" content="count-people — people counting Telegram bot">
 <meta property="og:description" content="Send a photo or a video on Telegram, get the people count with age/gender demographics back. Privacy-first: media is deleted after analysis.">
-<meta property="og:image" content="https://hectorifc.github.io/count-peoples/assets/logo.png">
+<meta property="og:image" content="https://hectorifc.github.io/count-people/assets/logo.png">
 <style>
   :root {
     --bg: #0b161d;
@@ -206,14 +206,14 @@
 
 <nav>
   <div class="nav-inner">
-    <img src="assets/logo.png" alt="count-peoples logo">
-    <span class="brand">count-peoples</span>
+    <img src="assets/logo.png" alt="count-people logo">
+    <span class="brand">count-people</span>
     <a class="nav-link" href="#demo">Demo</a>
     <a class="nav-link" href="#numbers">Numbers</a>
     <a class="nav-link nav-links-extra" href="#local">Run locally</a>
     <a class="nav-link nav-links-extra" href="#vps">VPS</a>
     <a class="nav-link nav-links-extra" href="#telegram">Telegram</a>
-    <a class="nav-link" href="https://github.com/HectorIFC/count-peoples">GitHub ↗</a>
+    <a class="nav-link" href="https://github.com/HectorIFC/count-people">GitHub ↗</a>
   </div>
 </nav>
 
@@ -234,7 +234,7 @@
         <span class="badge"><b>MIT</b> license</span>
       </div>
       <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/HectorIFC/count-peoples">View on GitHub</a>
+        <a class="btn btn-primary" href="https://github.com/HectorIFC/count-people">View on GitHub</a>
         <a class="btn btn-ghost" href="#local">Get started →</a>
       </div>
     </div>
@@ -273,13 +273,13 @@
 
     <div class="demo-grid">
       <figure class="demo-media reveal">
-        <img src="assets/peoples.jpg" alt="Sample photo: group of people">
-        <figcaption>Public sample photo (<code>peoples.jpg</code>) — also used by the integration tests</figcaption>
+        <img src="assets/people.jpg" alt="Sample photo: group of people">
+        <figcaption>Public sample photo (<code>people.jpg</code>) — also used by the integration tests</figcaption>
       </figure>
 
       <div class="chat reveal">
         <div class="msg from-user">
-          <img src="assets/peoples.jpg" alt="photo sent to the bot">
+          <img src="assets/people.jpg" alt="photo sent to the bot">
           <span class="caption">Sunday meeting</span>
           <span class="time">14:32 ✓✓</span>
         </div>
@@ -300,8 +300,8 @@ Adults: 4 M, 8 F</pre><span class="time">14:32</span></div>
 
     <div class="demo-grid">
       <figure class="demo-media reveal">
-        <video src="assets/peoples.mp4" controls muted loop playsinline></video>
-        <figcaption>Public sample video (<code>peoples.mp4</code>) — 13.7s, 343 frames @ 25 fps</figcaption>
+        <video src="assets/people.mp4" controls muted loop playsinline></video>
+        <figcaption>Public sample video (<code>people.mp4</code>) — 13.7s, 343 frames @ 25 fps</figcaption>
       </figure>
 
       <div class="result-card reveal">
@@ -361,7 +361,7 @@ Adults: 4 M, 8 F</pre><span class="time">14:32</span></div>
           <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
           <span>zsh — local setup</span>
         </div>
-        <pre><span class="t-prompt">$</span> <span class="t-cmd">git clone https://github.com/HectorIFC/count-peoples && cd count-peoples</span>
+        <pre><span class="t-prompt">$</span> <span class="t-cmd">git clone https://github.com/HectorIFC/count-people && cd count-people</span>
 <span class="t-prompt">$</span> <span class="t-cmd">python3.12 -m venv .venv && source .venv/bin/activate</span>
 <span class="t-prompt">$</span> <span class="t-cmd">PIP_CONSTRAINT=$PWD/constraints.txt pip install -r requirements.txt</span>
 <span class="t-dim"># ... resolves torch (MPS on Apple Silicon), MiVOLO, OpenCV ...</span>
@@ -389,7 +389,7 @@ Adults: 4 M, 8 F</pre><span class="time">14:32</span></div>
           security patches. The full hardened systemd unit (sandboxed with
           <code class="inline">ProtectSystem=strict</code>, secrets via root-only
           <code class="inline">EnvironmentFile</code>) is in the
-          <a href="https://github.com/HectorIFC/count-peoples#5-keep-the-bot-running">README</a>.</p>
+          <a href="https://github.com/HectorIFC/count-people#5-keep-the-bot-running">README</a>.</p>
         <ol>
           <li>Create a dedicated no-shell user (<code class="inline">peoplebot</code>)</li>
           <li>Install with CPU-only torch (~10× smaller than the CUDA package)</li>
@@ -440,7 +440,7 @@ Adults: 4 M, 8 F</pre><span class="time">14:32</span></div>
             <code class="inline">ALLOWED_USER_IDS=111111111</code></li>
         </ol>
         <p style="color:var(--muted); margin-top:14px">Optional: send <code class="inline">/setuserpic</code> to @BotFather and upload
-          <a href="https://github.com/HectorIFC/count-peoples/blob/main/assets/logo.png">the project logo</a>.</p>
+          <a href="https://github.com/HectorIFC/count-people/blob/main/assets/logo.png">the project logo</a>.</p>
       </div>
     </div>
   </div>
@@ -466,7 +466,7 @@ Adults: 4 M, 8 F</pre><span class="time">14:32</span></div>
 <footer>
   <div class="wrap">
     <span>MIT License · built on <a href="https://github.com/WildChlamydia/MiVOLO">MiVOLO</a> &amp; <a href="https://github.com/python-telegram-bot/python-telegram-bot">python-telegram-bot</a></span>
-    <span><a href="https://github.com/HectorIFC/count-peoples">github.com/HectorIFC/count-peoples</a></span>
+    <span><a href="https://github.com/HectorIFC/count-people">github.com/HectorIFC/count-people</a></span>
   </div>
 </footer>
 
