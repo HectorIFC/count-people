@@ -1,0 +1,3 @@
+# Build constraint: MiVOLO's setup.py imports pkg_resources, removed from
+# setuptools >= 81. Use: PIP_CONSTRAINT=$PWD/constraints.txt pip install -r requirements.txt
+setuptools<81

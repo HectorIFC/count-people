@@ -1,0 +1,31 @@
+# Python environment
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.coverage
+
+# Secrets: the bot token NEVER goes into git
+.env
+
+# Local data: model weights, history and logs
+models/
+*.csv
+*.log
+*.out
+
+# Media: photos/videos of real people are not committed (privacy)
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.mov
+*.avi
+
+# Exception: the bot logo (no real people, used as Telegram profile picture)
+!assets/logo.png
+
+# macOS
+.DS_Store

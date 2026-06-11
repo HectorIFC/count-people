@@ -1,0 +1,12 @@
+target-version = "py312"
+line-length = 100
+
+# The Colab notebook is standalone by design (names span cells, ! magics)
+extend-exclude = ["count-peoples.ipynb"]
+
+[lint]
+# pycodestyle, pyflakes, warnings, import sorting, bugbear, pyupgrade
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[lint.isort]
+known-first-party = ["analysis", "bot", "history", "messages", "conftest"]

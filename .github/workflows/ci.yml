@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches-ignore: [main]  # feature branches get CI too
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Tests & Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install system libraries (OpenCV runtime)
+        run: sudo apt-get update && sudo apt-get install -y libgl1
+
+      # CPU-only torch: ~10x smaller than the default CUDA package
+      - name: Install CPU-only torch
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      # The constraint works around the pkg_resources removal in setuptools >= 81,
+      # which breaks MiVOLO's setup.py inside the isolated build environment.
+      - name: Install dependencies
+        run: PIP_CONSTRAINT=$PWD/constraints.txt pip install -r requirements.txt -r requirements-dev.txt
+
+      # Coverage gate (>= 80%) lives in pytest.ini. Integration tests skip
+      # automatically: they need RUN_INTEGRATION=1 plus local weights/media.
+      - name: Run tests
+        run: pytest
+
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: ruff — lint & static analysis
+        run: ruff check .
